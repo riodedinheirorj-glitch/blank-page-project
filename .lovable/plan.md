@@ -1,68 +1,91 @@
 
 
-## Sistema de Assinatura Mensal - R$ 34,99 via PIX
+## Interface de Login HUD Sci-Fi - RotaSmart
 
-### Resumo
+### Visao Geral
+Criar uma tela de login imersiva com estetica de ficção cientifica (HUD - Heads-Up Display), com aneis rotativos animados, diagnosticos de sistema em tempo real, logs de terminal e atmosfera futurista. Totalmente responsiva para mobile.
 
-Criar uma tela completa de assinatura mensal onde o motorista pode assinar o plano de R$ 34,99/mes via PIX, com QR Code para pagamento. O sistema verificara se a assinatura esta ativa antes de permitir o uso de funcionalidades premium.
+### Componentes a Criar
 
----
+**1. `src/pages/Auth.tsx`** - Pagina principal de autenticacao
+- Gerencia estados de login/signup/reset-password
+- Verifica sessao existente e redireciona ao dashboard
+- Listener `onAuthStateChange` configurado antes de `getSession`
 
-### Componentes a criar
+**2. `src/components/auth/HudLoginScreen.tsx`** - Tela principal do HUD
+- Fundo escuro com grade de linhas finas (grid pattern via CSS)
+- Particulas flutuantes animadas (pontos de luz se movendo)
+- Aneis concentricos rotativos ao redor do formulario central
+- Diagnosticos laterais com dados simulados em tempo real (CPU, MEM, LATENCY)
+- Terminal de logs ativo com mensagens rolando automaticamente
+- Formulario central transparente com inputs estilizados neon
+- Alternancia entre Login e Cadastro
 
-**1. Tela de Assinatura (`src/components/Subscription.tsx`)**
-- Card com detalhes do plano (nome, preco R$ 34,99, beneficios)
-- Lista de beneficios inclusos (rotas ilimitadas, otimizacao, suporte, etc.)
-- Botao "ASSINAR AGORA" que abre o fluxo de pagamento PIX
-- Indicador de status da assinatura (ativa/expirada/sem assinatura)
-- Se ja assinante, mostrar data de expiracao e badge "ATIVO"
+**3. `src/components/auth/HudRings.tsx`** - Aneis rotativos SVG
+- 3 aneis concentricos com velocidades e direcoes diferentes
+- Tracos, pontos e marcadores ao longo dos aneis
+- Animacao CSS `@keyframes rotate` continua
+- Efeito de glow azul/ciano
 
-**2. Modal de Pagamento PIX (`src/components/PixPaymentModal.tsx`)**
-- QR Code PIX gerado (inicialmente simulado com dados estaticos)
-- Codigo "copia e cola" do PIX
-- Timer de expiracao do QR Code (15 minutos)
-- Botao "Copiar codigo PIX"
-- Polling simulado para verificar pagamento (botao "Ja paguei" por enquanto)
-- Animacao de sucesso ao confirmar pagamento
+**4. `src/components/auth/HudDiagnostics.tsx`** - Painel de diagnosticos
+- Barras de progresso animadas (CPU, MEMORY, NETWORK)
+- Valores numericos atualizando a cada segundo
+- Indicadores de status piscando (ONLINE, SECURE, SYNCED)
+- Fonte monoesspacada, estetica de terminal
 
----
+**5. `src/components/auth/HudTerminal.tsx`** - Terminal de logs
+- Mensagens de log aparecendo sequencialmente com efeito typewriter
+- Mensagens como: `[SYS] Initializing RotaSmart v3.7...`, `[AUTH] Awaiting credentials...`, `[NET] Connection secure - TLS 1.3`
+- Scroll automatico para baixo
+- Fonte monoesspacada verde/ciano sobre fundo semi-transparente
 
-### Alteracoes em arquivos existentes
+**6. `src/pages/ResetPassword.tsx`** - Pagina de reset de senha (obrigatoria)
+- Verifica `type=recovery` na URL hash
+- Chama `supabase.auth.updateUser({ password })` 
+- Estilo consistente com o tema HUD
+
+### Atualizacoes em Arquivos Existentes
+
+**`src/App.tsx`**
+- Adicionar rota `/auth` para a pagina de login
+- Adicionar rota `/reset-password` para reset de senha
 
 **`src/pages/Index.tsx`**
-- Adicionar "subscription" ao tipo `Screen`
-- Importar e renderizar o componente `Subscription`
+- Verificar sessao do usuario; se nao autenticado, redirecionar para `/auth`
+- Adicionar listener `onAuthStateChange`
 
-**`src/components/BottomNav.tsx`**
-- Nenhuma alteracao (acesso via perfil ou dashboard)
+**`src/index.css`**
+- Adicionar keyframes para rotacao dos aneis (`hud-rotate`, `hud-rotate-reverse`)
+- Adicionar keyframes para pulso de glow (`hud-glow-pulse`)
+- Adicionar keyframes para digitacao do terminal (`hud-typewriter`)
+- Adicionar keyframes para particulas flutuantes (`hud-float`)
+- Adicionar estilos da grade de fundo do HUD
+- Adicionar classe `.font-mono-hud` para fonte monoesspacada
 
-**`src/components/Profile.tsx`**
-- Adicionar item de menu "Assinatura" com icone de coroa/estrela
-- Mostrar badge de status (Ativo/Inativo)
-- Navegar para tela de assinatura ao clicar
+### Design Visual (Detalhes)
 
-**`src/components/Dashboard.tsx`**
-- Adicionar banner no topo quando assinatura esta inativa/expirada
-- Banner com CTA "Assine agora" que leva a tela de assinatura
+- **Paleta**: Fundo `#0a0e1a`, aneis `#00d4ff` (ciano), acentos `#7b61ff` (roxo), texto `#00ff88` (verde terminal)
+- **Tipografia**: Inter para UI, `monospace` para terminal/diagnosticos
+- **Layout Mobile**: Aneis menores, diagnosticos acima e abaixo do formulario, terminal compacto
+- **Animacoes**: Rotacao suave 20-60s por anel, glow pulsante 2s, logs a cada 1.5s
 
----
+### Fluxo de Autenticacao
 
-### Fluxo do usuario
+1. Usuario abre o app -> verifica sessao
+2. Sem sessao -> redireciona para `/auth`
+3. Tela HUD carrega com animacoes
+4. Usuario faz login ou cadastro (email + senha + nome/telefone no cadastro)
+5. Cadastro: email de verificacao enviado (sem auto-confirm)
+6. Login: redireciona para `/` (dashboard)
+7. Esqueceu senha: envia email com link para `/reset-password`
 
-```text
-Perfil -> Assinatura -> Ver plano -> Assinar Agora
-  -> Modal PIX (QR Code + codigo copia/cola)
-  -> Confirmar pagamento -> Assinatura ativa por 30 dias
-```
+### Secao Tecnica
 
----
-
-### Detalhes tecnicos
-
-- O banco ja possui `user_wallets.subscription_expires_at` para controlar a validade
-- O QR Code PIX sera inicialmente simulado (imagem estatica + codigo mock)
-- Para integracao real futura, sera necessario criar uma Edge Function com um gateway de pagamento (ex: EfiPay, Mercado Pago) que gera o QR Code PIX dinamicamente
-- A verificacao de assinatura ativa sera feita comparando `subscription_expires_at` com a data atual
-- Ao "confirmar" pagamento, o sistema atualiza `subscription_expires_at` para `now() + 30 dias`
-- Componente usa o mesmo design system do app (cards arredondados, gradients, sombras)
+- Autenticacao via `supabase.auth.signInWithPassword()` e `supabase.auth.signUp()`
+- Signup inclui `emailRedirectTo: window.location.origin`
+- Reset usa `supabase.auth.resetPasswordForEmail()` com `redirectTo: window.location.origin + '/reset-password'`
+- Perfil ja existe na tabela `profiles` (campos: email, name, phone, user_id)
+- Apos signup, inserir registro na tabela `profiles`
+- Animacoes feitas em CSS puro (sem libs extras)
+- SVGs inline para os aneis rotativos
 
