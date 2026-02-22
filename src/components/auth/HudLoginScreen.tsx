@@ -2,8 +2,6 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import HudRings from "./HudRings";
-import HudDiagnostics from "./HudDiagnostics";
-import HudTerminal from "./HudTerminal";
 
 type Mode = "login" | "signup" | "forgot";
 
@@ -56,7 +54,6 @@ const HudLoginScreen = ({ onSuccess }: Props) => {
       setLoading(false);
       return;
     }
-    // Insert profile
     if (data.user) {
       await supabase.from("profiles").upsert({
         id: data.user.id,
@@ -91,7 +88,7 @@ const HudLoginScreen = ({ onSuccess }: Props) => {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#0a0e1a] flex flex-col items-center justify-center">
+    <div className="relative min-h-[100dvh] w-full overflow-hidden bg-[#0a0e1a] flex items-center justify-center px-4 py-8">
       {/* Grid background */}
       <div className="hud-grid-bg absolute inset-0" />
 
@@ -114,154 +111,131 @@ const HudLoginScreen = ({ onSuccess }: Props) => {
         />
       ))}
 
-      {/* Diagnostics - left side (desktop) / top (mobile) */}
-      <div className="relative z-10 flex md:hidden justify-center mb-4 px-4">
-        <HudDiagnostics />
-      </div>
+      {/* Rings + Form */}
+      <div className="relative z-10 flex items-center justify-center">
+        <HudRings />
 
-      {/* Main center area */}
-      <div className="relative z-10 flex items-center justify-center gap-8 w-full px-4">
-        {/* Left diagnostics (desktop) */}
-        <div className="hidden md:block">
-          <HudDiagnostics />
-        </div>
+        {/* Login form */}
+        <form
+          onSubmit={handleSubmit}
+          className="relative z-20 w-[300px] sm:w-[320px] bg-black/50 backdrop-blur-md border border-[#00d4ff]/20 rounded-2xl p-6 space-y-4"
+          style={{ boxShadow: "0 0 40px rgba(0, 212, 255, 0.08)" }}
+        >
+          {/* Logo */}
+          <div className="text-center mb-2">
+            <h1 className="text-2xl font-bold tracking-wider" style={{ color: "#00d4ff" }}>
+              ROTA
+              <span style={{ color: "#7b61ff" }}>SMART</span>
+            </h1>
+            <p className="text-[10px] font-mono text-[#00d4ff]/40 mt-1 tracking-widest uppercase">
+              {mode === "login"
+                ? "Authentication Required"
+                : mode === "signup"
+                ? "New User Registration"
+                : "Password Recovery"}
+            </p>
+          </div>
 
-        {/* Rings + Form */}
-        <div className="relative flex items-center justify-center">
-          <HudRings />
-
-          {/* Login form */}
-          <form
-            onSubmit={handleSubmit}
-            className="relative z-20 w-[280px] md:w-[300px] bg-black/50 backdrop-blur-md border border-[#00d4ff]/20 rounded-2xl p-6 space-y-4"
-            style={{ boxShadow: "0 0 40px rgba(0, 212, 255, 0.08)" }}
-          >
-            {/* Logo */}
-            <div className="text-center mb-2">
-              <h1 className="text-xl font-bold tracking-wider" style={{ color: "#00d4ff" }}>
-                ROTA
-                <span style={{ color: "#7b61ff" }}>SMART</span>
-              </h1>
-              <p className="text-[10px] font-mono text-[#00d4ff]/40 mt-1 tracking-widest uppercase">
-                {mode === "login"
-                  ? "Authentication Required"
-                  : mode === "signup"
-                  ? "New User Registration"
-                  : "Password Recovery"}
-              </p>
-            </div>
-
-            {mode === "signup" && (
-              <>
-                <input
-                  type="text"
-                  placeholder="Nome completo"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="hud-input"
-                  required
-                />
-                <input
-                  type="tel"
-                  placeholder="Telefone (opcional)"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="hud-input"
-                />
-              </>
-            )}
-
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="hud-input"
-              required
-            />
-
-            {mode !== "forgot" && (
+          {mode === "signup" && (
+            <>
               <input
-                type="password"
-                placeholder="Senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                type="text"
+                placeholder="Nome completo"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="hud-input"
                 required
-                minLength={6}
               />
+              <input
+                type="tel"
+                placeholder="Telefone (opcional)"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="hud-input"
+              />
+            </>
+          )}
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="hud-input"
+            required
+          />
+
+          {mode !== "forgot" && (
+            <input
+              type="password"
+              placeholder="Senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="hud-input"
+              required
+              minLength={6}
+            />
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2.5 rounded-lg font-semibold text-sm tracking-wide transition-all duration-300 disabled:opacity-40"
+            style={{
+              background: "linear-gradient(135deg, #00d4ff, #7b61ff)",
+              color: "#0a0e1a",
+              boxShadow: "0 0 20px rgba(0, 212, 255, 0.3)",
+            }}
+          >
+            {loading
+              ? "Processando..."
+              : mode === "login"
+              ? "ACESSAR SISTEMA"
+              : mode === "signup"
+              ? "REGISTRAR"
+              : "ENVIAR LINK"}
+          </button>
+
+          {/* Links */}
+          <div className="text-center space-y-1.5 text-[11px] font-mono">
+            {mode === "login" && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setMode("forgot")}
+                  className="block w-full text-[#00d4ff]/50 hover:text-[#00d4ff] transition-colors"
+                >
+                  Esqueceu a senha?
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMode("signup")}
+                  className="block w-full text-[#7b61ff]/60 hover:text-[#7b61ff] transition-colors"
+                >
+                  Criar nova conta
+                </button>
+              </>
             )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-2.5 rounded-lg font-semibold text-sm tracking-wide transition-all duration-300 disabled:opacity-40"
-              style={{
-                background: "linear-gradient(135deg, #00d4ff, #7b61ff)",
-                color: "#0a0e1a",
-                boxShadow: "0 0 20px rgba(0, 212, 255, 0.3)",
-              }}
-            >
-              {loading
-                ? "Processando..."
-                : mode === "login"
-                ? "ACESSAR SISTEMA"
-                : mode === "signup"
-                ? "REGISTRAR"
-                : "ENVIAR LINK"}
-            </button>
-
-            {/* Links */}
-            <div className="text-center space-y-1.5 text-[11px] font-mono">
-              {mode === "login" && (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => setMode("forgot")}
-                    className="block w-full text-[#00d4ff]/50 hover:text-[#00d4ff] transition-colors"
-                  >
-                    Esqueceu a senha?
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setMode("signup")}
-                    className="block w-full text-[#7b61ff]/60 hover:text-[#7b61ff] transition-colors"
-                  >
-                    Criar nova conta
-                  </button>
-                </>
-              )}
-              {mode === "signup" && (
-                <button
-                  type="button"
-                  onClick={() => setMode("login")}
-                  className="block w-full text-[#00d4ff]/50 hover:text-[#00d4ff] transition-colors"
-                >
-                  Já tenho uma conta
-                </button>
-              )}
-              {mode === "forgot" && (
-                <button
-                  type="button"
-                  onClick={() => setMode("login")}
-                  className="block w-full text-[#00d4ff]/50 hover:text-[#00d4ff] transition-colors"
-                >
-                  Voltar ao login
-                </button>
-              )}
-            </div>
-          </form>
-        </div>
-
-        {/* Right diagnostics (desktop) */}
-        <div className="hidden md:block">
-          <HudDiagnostics />
-        </div>
-      </div>
-
-      {/* Terminal - bottom */}
-      <div className="relative z-10 mt-6 px-4 flex justify-center">
-        <HudTerminal />
+            {mode === "signup" && (
+              <button
+                type="button"
+                onClick={() => setMode("login")}
+                className="block w-full text-[#00d4ff]/50 hover:text-[#00d4ff] transition-colors"
+              >
+                Já tenho uma conta
+              </button>
+            )}
+            {mode === "forgot" && (
+              <button
+                type="button"
+                onClick={() => setMode("login")}
+                className="block w-full text-[#00d4ff]/50 hover:text-[#00d4ff] transition-colors"
+              >
+                Voltar ao login
+              </button>
+            )}
+          </div>
+        </form>
       </div>
     </div>
   );
