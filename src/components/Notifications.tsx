@@ -101,8 +101,16 @@ export function getNotificationCount(daysRemaining: number | null): number {
 
 const Notifications = ({ onNavigate }: NotificationsProps) => {
   const { daysRemaining } = useSubscriptionDays();
-  const notifications = getNotifications(daysRemaining);
+  const [readIds, setReadIds] = React.useState<Set<number>>(new Set());
+  const notifications = getNotifications(daysRemaining).map(n => ({
+    ...n,
+    read: n.read || readIds.has(n.id),
+  }));
   const unreadCount = notifications.filter(n => !n.read).length;
+
+  const markAsRead = (id: number) => {
+    setReadIds(prev => new Set(prev).add(id));
+  };
 
   return (
     <div className="flex flex-col h-full bg-background px-5 pb-8">
@@ -127,7 +135,8 @@ const Notifications = ({ onNavigate }: NotificationsProps) => {
         {notifications.map((n) => (
           <div
             key={n.id}
-            className={`bg-card rounded-2xl p-4 shadow-card flex items-start gap-3 ${!n.read ? 'border-l-4 border-primary' : ''}`}
+            onClick={() => markAsRead(n.id)}
+            className={`bg-card rounded-2xl p-4 shadow-card flex items-start gap-3 cursor-pointer transition-all ${!n.read ? 'border-l-4 border-primary' : ''}`}
           >
             <div className={`w-10 h-10 rounded-xl ${n.bg} flex items-center justify-center shrink-0 mt-0.5`}>
               <n.icon size={18} className={n.color} />
