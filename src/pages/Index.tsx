@@ -89,9 +89,11 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#E8ECF1] flex items-center justify-center p-6">
-      <div className="phone-frame flex flex-col" style={{ maxHeight: "860px" }}>
-        <StatusBar />
+    <div className="min-h-screen bg-background md:bg-[#E8ECF1] flex items-center justify-center md:p-6">
+      <div className="w-full h-screen md:h-auto md:phone-frame flex flex-col md:max-h-[860px]">
+        <div className="hidden md:block">
+          <StatusBar />
+        </div>
         <div className="flex-1 overflow-hidden flex flex-col">
           <div className="flex-1 overflow-y-auto h-0" style={{ scrollbarWidth: "none" }}>
             {renderScreen()}
