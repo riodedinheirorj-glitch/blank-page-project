@@ -5,6 +5,7 @@ import { Bell, MapPin, Clock, TrendingUp, FileUp, History, Crown } from "lucide-
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { useSubscriptionDays } from "@/hooks/useSubscriptionDays";
 import { getNotificationCount } from "@/components/Notifications";
+import { useReadNotifications } from "@/hooks/useReadNotifications";
 
 interface DashboardProps {
   onNavigate: (screen: string) => void;
@@ -17,7 +18,8 @@ const Dashboard = ({ onNavigate }: DashboardProps) => {
   const [currentDate, setCurrentDate] = useState("");
   const [location, setLocation] = useState("");
 
-  const notifCount = getNotificationCount(daysRemaining);
+  const readIds = useReadNotifications();
+  const notifCount = getNotificationCount(daysRemaining, readIds);
 
   useEffect(() => {
     const hour = new Date().getHours();
