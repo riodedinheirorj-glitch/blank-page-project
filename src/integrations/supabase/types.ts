@@ -17,52 +17,55 @@ export type Database = {
       credit_purchases: {
         Row: {
           amount: number
-          approved_at: string | null
-          approved_by: string | null
           created_at: string | null
-          credits: number
           id: string
+          payment_id: string | null
+          price: number
           status: string
+          updated_at: string | null
           user_id: string
         }
         Insert: {
           amount: number
-          approved_at?: string | null
-          approved_by?: string | null
           created_at?: string | null
-          credits: number
           id?: string
+          payment_id?: string | null
+          price: number
           status?: string
+          updated_at?: string | null
           user_id: string
         }
         Update: {
           amount?: number
-          approved_at?: string | null
-          approved_by?: string | null
           created_at?: string | null
-          credits?: number
           id?: string
+          payment_id?: string | null
+          price?: number
           status?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
       }
       downloads: {
         Row: {
-          downloaded_at: string | null
+          created_at: string | null
           file_name: string
+          file_type: string | null
           id: string
           user_id: string
         }
         Insert: {
-          downloaded_at?: string | null
+          created_at?: string | null
           file_name: string
+          file_type?: string | null
           id?: string
           user_id: string
         }
         Update: {
-          downloaded_at?: string | null
+          created_at?: string | null
           file_name?: string
+          file_type?: string | null
           id?: string
           user_id?: string
         }
@@ -71,19 +74,19 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string | null
-          email: string
+          email: string | null
           full_name: string | null
           id: string
         }
         Insert: {
           created_at?: string | null
-          email: string
+          email?: string | null
           full_name?: string | null
           id: string
         }
         Update: {
           created_at?: string | null
-          email?: string
+          email?: string | null
           full_name?: string | null
           id?: string
         }
@@ -91,6 +94,7 @@ export type Database = {
       }
       transactions: {
         Row: {
+          admin_id: string | null
           amount: number
           created_at: string | null
           description: string | null
@@ -99,6 +103,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          admin_id?: string | null
           amount: number
           created_at?: string | null
           description?: string | null
@@ -107,6 +112,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          admin_id?: string | null
           amount?: number
           created_at?: string | null
           description?: string | null
@@ -161,27 +167,6 @@ export type Database = {
         }
         Relationships: []
       }
-      user_subscriptions: {
-        Row: {
-          created_at: string
-          expires_at: string
-          id: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          expires_at: string
-          id?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          expires_at?: string
-          id?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
@@ -194,7 +179,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      process_download: { Args: { p_file_name: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user"
