@@ -60,7 +60,7 @@ const Dashboard = ({ onNavigate }: DashboardProps) => {
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-background px-5 pb-8">
+    <div className="flex flex-col h-full bg-background px-4 sm:px-5 pb-6 sm:pb-8">
       {/* Header */}
       <div className="flex items-start justify-between pt-4 pb-6">
         <div>
