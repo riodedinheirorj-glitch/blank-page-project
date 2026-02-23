@@ -6,7 +6,10 @@ import OptimizationResult from "@/components/OptimizationResult";
 import OptimizationLoading from "@/components/OptimizationLoading";
 import LocationAdjustment from "@/components/LocationAdjustment";
 import Profile from "@/components/Profile";
+import PersonalData from "@/components/PersonalData";
+import Security from "@/components/Security";
 import Subscription from "@/components/Subscription";
+import Notifications from "@/components/Notifications";
 import BottomNav from "@/components/BottomNav";
 import StatusBar from "@/components/StatusBar";
 
@@ -18,7 +21,7 @@ export type ImportedData = {
   fixedCeps: number;
 };
 
-type Screen = "dashboard" | "route" | "import" | "result" | "loading" | "adjustment" | "profile" | "subscription";
+type Screen = "dashboard" | "route" | "import" | "result" | "loading" | "adjustment" | "profile" | "personal-data" | "security" | "subscription" | "notifications";
 
 const Index = () => {
   const [screen, setScreen] = useState<Screen>("dashboard");
@@ -53,8 +56,14 @@ const Index = () => {
         return <OptimizationResult onNavigate={navigate} importedData={importedData} />;
       case "profile":
         return <Profile onNavigate={navigate} />;
+      case "personal-data":
+        return <PersonalData onNavigate={navigate} />;
+      case "security":
+        return <Security onNavigate={navigate} />;
       case "subscription":
         return <Subscription onNavigate={navigate} />;
+      case "notifications":
+        return <Notifications onNavigate={navigate} />;
       default:
         return <Dashboard onNavigate={navigate} />;
     }
