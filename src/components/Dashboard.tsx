@@ -23,14 +23,14 @@ const Dashboard = ({ onNavigate }: DashboardProps) => {
 
   useEffect(() => {
     const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) setGreeting("Bom dia");
-    else if (hour >= 12 && hour < 18) setGreeting("Boa tarde");
-    else setGreeting("Boa noite");
+    if (hour >= 5 && hour < 12) setGreeting("Bom dia");else
+    if (hour >= 12 && hour < 18) setGreeting("Boa tarde");else
+    setGreeting("Boa noite");
 
     const date = new Date();
     const formattedDate = date.toLocaleDateString("pt-BR", {
       day: "numeric",
-      month: "long",
+      month: "long"
     });
     setCurrentDate(formattedDate);
 
@@ -74,20 +74,20 @@ const Dashboard = ({ onNavigate }: DashboardProps) => {
         </div>
         <button onClick={() => onNavigate("notifications")} className="relative w-10 h-10 rounded-2xl bg-card shadow-card flex items-center justify-center">
           <Bell size={18} className={`text-foreground ${notifCount > 0 ? 'animate-bell-ring' : ''}`} />
-          {notifCount > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[16px] h-4 bg-red-500 rounded-full text-white text-[9px] font-bold flex items-center justify-center px-1">
+          {notifCount > 0 &&
+          <span className="absolute -top-1 -right-1 min-w-[16px] h-4 bg-red-500 rounded-full text-white text-[9px] font-bold flex items-center justify-center px-1">
               {notifCount}
             </span>
-          )}
+          }
         </button>
       </div>
 
       {/* Subscription Banner */}
-      {(daysRemaining === null || daysRemaining === 0) && (
-        <button
-          onClick={() => onNavigate("subscription")}
-          className="w-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-4 mb-4 flex items-center gap-3 active:scale-[0.98] transition-transform shadow-card"
-        >
+      {(daysRemaining === null || daysRemaining === 0) &&
+      <button
+        onClick={() => onNavigate("subscription")}
+        className="w-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-4 mb-4 flex items-center gap-3 active:scale-[0.98] transition-transform shadow-card">
+
           <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
             <Crown size={20} className="text-white" />
           </div>
@@ -97,7 +97,7 @@ const Dashboard = ({ onNavigate }: DashboardProps) => {
           </div>
           <span className="text-xs font-bold text-white bg-white/20 px-3 py-1 rounded-full">VER</span>
         </button>
-      )}
+      }
 
       {/* Main delivery card */}
       <div className="bg-card rounded-[20px] shadow-card p-5 mb-4">
@@ -135,31 +135,31 @@ const Dashboard = ({ onNavigate }: DashboardProps) => {
 
         <button
           onClick={() => onNavigate("import")}
-          className="w-full gradient-primary text-white font-bold text-base py-4 rounded-[16px] shadow-button flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
-        >
+          className="w-full gradient-primary text-white font-bold text-base py-4 rounded-[16px] shadow-button flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+
           <FileUp size={18} />
           IMPORTAR ROMANEIO
         </button>
       </div>
 
       {/* Mini stats cards */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
-        <div className="bg-card rounded-[16px] shadow-card p-4 flex flex-col items-center justify-center">
-          <span className="text-2xl font-extrabold text-foreground">12</span>
-          <span className="text-xs text-muted-foreground text-center mt-1 leading-tight">Bairros</span>
-        </div>
-        <div className="bg-card rounded-[16px] shadow-card p-4 flex flex-col items-center justify-center">
-          <span className="text-2xl font-extrabold text-foreground">3</span>
-          <span className="text-xs text-muted-foreground text-center mt-1 leading-tight">Múltiplos volumes</span>
-        </div>
-        <div className="bg-card rounded-[16px] shadow-card p-4 flex flex-col items-center justify-center">
-          <span className="text-2xl font-extrabold text-foreground">2</span>
-          <span className="text-xs text-muted-foreground text-center mt-1 leading-tight">Endereços repetidos</span>
-        </div>
-      </div>
+      
 
-    </div>
-  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>);
+
 };
 
 export default Dashboard;
