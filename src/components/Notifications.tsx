@@ -36,9 +36,10 @@ const baseNotifications: Notification[] = [
     color: 'text-amber-500',
     bg: 'bg-amber-50',
     title: 'Bem-vindo ao RotaSmart!',
-    description: 'Você recebeu créditos de boas-vindas. Comece a otimizar suas rotas agora.',
+    description: 'Assine o plano Premium para começar a otimizar suas rotas de entrega.',
     time: 'Ontem, 14:10',
     read: false,
+    action: { label: 'Ver planos', screen: 'subscription' },
   },
   {
     id: 4,
