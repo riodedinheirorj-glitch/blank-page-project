@@ -158,26 +158,6 @@ const Dashboard = ({ onNavigate }: DashboardProps) => {
         </div>
       </div>
 
-      {/* Quick actions */}
-      <div className="mt-auto">
-        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">
-          Ações rápidas
-        </p>
-        <div className="flex gap-3">
-          <button
-            onClick={() => onNavigate("import")}
-            className="flex-1 bg-card rounded-[16px] shadow-card py-4 px-3 text-sm font-semibold text-foreground text-center active:scale-[0.98] transition-transform"
-          >
-            📄 Importar romaneio
-          </button>
-          <button
-            onClick={() => onNavigate("profile")}
-            className="flex-1 bg-card rounded-[16px] shadow-card py-4 px-3 text-sm font-semibold text-foreground text-center active:scale-[0.98] transition-transform"
-          >
-            👤 Perfil
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
