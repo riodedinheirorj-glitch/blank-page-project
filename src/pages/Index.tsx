@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import Dashboard from "@/components/Dashboard";
 import ActiveRoute from "@/components/ActiveRoute";
 import ImportRomaneio from "@/components/ImportRomaneio";
@@ -24,8 +26,25 @@ export type ImportedData = {
 type Screen = "dashboard" | "route" | "import" | "result" | "loading" | "adjustment" | "profile" | "personal-data" | "security" | "subscription" | "notifications";
 
 const Index = () => {
+  const navigateTo = useNavigate();
   const [screen, setScreen] = useState<Screen>("dashboard");
   const [importedData, setImportedData] = useState<ImportedData | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) navigateTo("/auth", { replace: true });
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) navigateTo("/auth", { replace: true });
+      else setAuthChecked(true);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigateTo]);
+
+  if (!authChecked) return null;
 
   const navigate = (s: string) => setScreen(s as Screen);
 
